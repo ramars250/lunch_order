@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "10384628688",
+    "firebase_url": "https://lunchorder-eec62-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "lunchorder-eec62",
+    "storage_bucket": "lunchorder-eec62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10384628688:android:22a93bf70572148e8737d5",
+        "android_client_info": {
+          "package_name": "com.example.lunch_order"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10384628688-9skvt4qcrfsnffbe793q9d9s6crn05dj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJet0EfMyrejSsKLS5jEfWfFnAIlPGA6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10384628688-9skvt4qcrfsnffbe793q9d9s6crn05dj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
