@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lunch_order/admin_view.dart';
 import 'package:lunch_order/auth_service.dart';
+import 'package:lunch_order/user_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -48,18 +49,25 @@ class _LoginViewState extends State<LoginView> {
             const SizedBox(height: 30.0),
             ElevatedButton(
               onPressed: () async {
+                final navigator = Navigator.of(context);
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
                 final message = await AuthService().login(
                   email: emailController.text,
                   password: passwordController.text,
                 );
                 if (message!.contains('Success')) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const AdminView(),
-                    ),
-                  );
+                  if (emailController.text == 'admin@bbb.com') {
+                    navigator.pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const AdminView(),
+                      ),
+                    );
+                  } else {
+                    navigator.pushReplacement(MaterialPageRoute(
+                        builder: (context) => const UserView()));
+                  }
                 }
-                ScaffoldMessenger.of(context)
+                scaffoldMessenger
                     .showSnackBar(SnackBar(content: Text(message.toString())));
               },
               child: const Text('登入'),

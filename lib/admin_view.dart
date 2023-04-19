@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lunch_order/provider.dart';
+import 'package:lunch_order/user_view.dart';
 
 class AdminView extends StatelessWidget {
   const AdminView({Key? key}) : super(key: key);
@@ -10,17 +11,26 @@ class AdminView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('午餐吃什麼'),
+        centerTitle: true,
       ),
       body: Center(
         child: Consumer(builder: (context, ref, _) {
-          final menuAsyncValue = ref.watch(storeProvider);
-          return menuAsyncValue.when(
-              data: (menu) => GestureDetector(
-                    onTap: () {},
-                    child: ListView.builder(
-                      itemCount: menu.length,
-                      itemBuilder: (context, index) => ListTile(
-                        title: Text(menu[index]['store_name'].toString()),
+          final storeAsyncValue = ref.watch(storeProvider);
+          return storeAsyncValue.when(
+              data: (store) => ListView.builder(
+                    itemCount: store.length,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(selectedStoreProvider.notifier)
+                            .selectedStore(index);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const UserView()));
+                      },
+                      child: ListTile(
+                        title: Text(store[index]['store_name'].toString()),
                       ),
                     ),
                   ),
