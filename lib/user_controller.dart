@@ -7,7 +7,19 @@ class UserNotifier extends StateNotifier<List> {
     state = [...state, item];
   }
 
+  void unSelectedItems(item) {
+    state = state.where((element) => element != item).toList();
+  }
+
   void removeItems(item) {
     state = List.of(state)..remove(item);
+  }
+
+  void toggleItemsSelected(item) {
+    if (state.contains(item)) {
+      unSelectedItems(item);
+    } else {
+      addSelectedItems(item);
+    }
   }
 }

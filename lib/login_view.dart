@@ -27,9 +27,11 @@ class _LoginViewState extends State<LoginView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('登入'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width / 2,

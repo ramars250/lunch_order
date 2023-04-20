@@ -1,4 +1,6 @@
+// ignore_for_file: avoid_print
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   Future<String?> login({
@@ -7,7 +9,14 @@ class AuthService {
   }) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email, password: password,);
+        email: email,
+        password: password,
+      );
+      //將用戶登入狀態保存
+      await SharedPreferences.getInstance().then((prefs) {
+        prefs.setBool('isAdminLoggedIn', email == 'admin@bbb.com');
+        prefs.setBool('isUserLoggedIn', email != 'admin@bbb.com');
+      });
       return 'Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user - not-found') {
