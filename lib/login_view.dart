@@ -54,11 +54,11 @@ class _LoginViewState extends State<LoginView> {
                 final navigator = Navigator.of(context);
                 final scaffoldMessenger = ScaffoldMessenger.of(context);
                 final message = await AuthService().login(
-                  email: emailController.text,
+                  email: '${emailController.text}@bbb.com',
                   password: passwordController.text,
                 );
                 if (message!.contains('Success')) {
-                  if (emailController.text == 'admin@bbb.com') {
+                  if (emailController.text == 'admin') {
                     navigator.pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => const AdminView(),

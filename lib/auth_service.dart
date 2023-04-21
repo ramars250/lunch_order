@@ -16,6 +16,7 @@ class AuthService {
       await SharedPreferences.getInstance().then((prefs) {
         prefs.setBool('isAdminLoggedIn', email == 'admin@bbb.com');
         prefs.setBool('isUserLoggedIn', email != 'admin@bbb.com');
+        prefs.setString('userName', email.split('@')[0]);
       });
       return 'Success';
     } on FirebaseAuthException catch (e) {

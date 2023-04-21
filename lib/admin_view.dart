@@ -19,7 +19,8 @@ class AdminView extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          SizedBox(
+          Expanded(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height * 2 / 3,
               width: MediaQuery.of(context).size.width,
               child: storeData.when(
@@ -53,21 +54,28 @@ class AdminView extends ConsumerWidget {
                         );
                       }),
                   error: (error, _) => const Text('ERROR'),
-                  loading: () => const CircularProgressIndicator())),
-          ElevatedButton(
+                  loading: () => const CircularProgressIndicator()),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ElevatedButton(
               onPressed: () {
-                DatabaseReference ref = FirebaseDatabase.instance.ref('order');
-                String now = DateTime.now().month.toString() +
+                DatabaseReference dataRef =
+                    FirebaseDatabase.instance.ref('order');
+                String now = DateTime.now().year.toString() +
+                    DateTime.now().month.toString() +
                     DateTime.now().day.toString();
                 String dateNow = DateTime.now().toString();
                 String dateHour =
                     DateTime.parse('$dateNow-0800').hour.toString();
                 String dateMinute =
                     DateTime.parse('$dateNow-0800').minute.toString();
-                ref.update({
+                dataRef.update({
                   now: Map<String, dynamic>.from(
                     {
-                      'start': '$dateHour:$dateMinute',
+                      'endTime': '$dateHour:$dateMinute',
+                      'selectedStore': storeSelected,
                       'menu': storeData.when(
                           data: (store) => store[storeSelected]['menu'],
                           error: (error, _) => const Text('ERROR'),
@@ -78,7 +86,9 @@ class AdminView extends ConsumerWidget {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const UserView()));
               },
-              child: const Text('確定')),
+              child: const Text('確定'),
+            ),
+          ),
         ],
       ),
     );
