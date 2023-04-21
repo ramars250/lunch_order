@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lunch_order/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class UserView extends ConsumerWidget {
   const UserView({Key? key}) : super(key: key);
@@ -57,11 +58,22 @@ class UserView extends ConsumerWidget {
                             final title = item['item_title'];
                             final price = item['price'];
                             final isSelected = itemData.contains(item);
+                            String orderTime = menu[0];
                             return GestureDetector(
                               onTap: () {
-                                ref
-                                    .read(selectedItemsProvider.notifier)
-                                    .addSelectedItems(item);
+                                final now = DateTime.parse('${DateTime.now()}-0800');
+                                final format = DateFormat('HH:mm');
+                                final nowString = format.format(now);
+                                final diff = orderTime.compareTo(nowString);
+                                print(nowString);
+                                if (diff <= 0) {
+                                  print('訂餐截止囉');
+                                } else {
+                                  ref
+                                      .read(selectedItemsProvider.notifier)
+                                      .toggleItemsSelected(item);
+                                }
+
                               },
                               child: Container(
                                 margin:
