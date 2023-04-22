@@ -61,7 +61,7 @@ class _LoginViewState extends State<LoginView> {
                   if (emailController.text == 'admin') {
                     navigator.pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const AdminView(),
+                        builder: (context) => AdminView(),
                       ),
                     );
                   } else {

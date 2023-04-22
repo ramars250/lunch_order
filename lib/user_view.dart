@@ -61,19 +61,34 @@ class UserView extends ConsumerWidget {
                             String orderTime = menu[0];
                             return GestureDetector(
                               onTap: () {
-                                final now = DateTime.parse('${DateTime.now()}-0800');
+                                final now =
+                                    DateTime.parse('${DateTime.now()}-0800');
                                 final format = DateFormat('HH:mm');
                                 final nowString = format.format(now);
                                 final diff = orderTime.compareTo(nowString);
                                 print(nowString);
                                 if (diff <= 0) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text('訂餐截止囉'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('確定'))
+                                        ],
+                                      );
+                                    },
+                                  );
                                   print('訂餐截止囉');
                                 } else {
                                   ref
                                       .read(selectedItemsProvider.notifier)
                                       .toggleItemsSelected(item);
                                 }
-
                               },
                               child: Container(
                                 margin:

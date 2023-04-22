@@ -20,6 +20,9 @@ final storeProvider = FutureProvider<List<dynamic>>((ref) async {
 final selectedStoreProvider =
     StateNotifierProvider<SelectedNotifier, int>((ref) => SelectedNotifier());
 
+//記錄結束時間的Provider
+final endTimeProvider = StateProvider<String>((ref) => '09:00');
+
 final menuProvider = FutureProvider<List<dynamic>>((ref) async {
   final dateTime = DateTime.now().year.toString() +
       DateTime.now().month.toString() +

@@ -6,7 +6,18 @@ import 'package:lunch_order/provider.dart';
 import 'package:lunch_order/user_view.dart';
 
 class AdminView extends ConsumerWidget {
-  const AdminView({Key? key}) : super(key: key);
+  AdminView({Key? key}) : super(key: key);
+
+  final List<String> timeList = [
+    '09:00',
+    '09:15',
+    '09:30',
+    '09:45',
+    '10:00',
+    '10:15',
+    '10:30',
+    '10:45',
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,6 +68,42 @@ class AdminView extends ConsumerWidget {
                   loading: () => const CircularProgressIndicator()),
             ),
           ),
+          Align(
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 10.0),
+                  child: Text(
+                    '結束訂餐時間',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: DropdownButton(
+                    value: ref.watch(endTimeProvider),
+                    items: timeList
+                        .map<DropdownMenuItem>(
+                            (time) => DropdownMenuItem<String>(
+                                value: time,
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    time,
+                                    style: const TextStyle(fontSize: 24),
+                                  ),
+                                )))
+                        .toList(),
+                    onChanged: (value) =>
+                        ref.read(endTimeProvider.notifier).state = value,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             padding: const EdgeInsets.only(bottom: 10),
             child: ElevatedButton(
@@ -66,15 +113,10 @@ class AdminView extends ConsumerWidget {
                 String now = DateTime.now().year.toString() +
                     DateTime.now().month.toString() +
                     DateTime.now().day.toString();
-                String dateNow = DateTime.now().toString();
-                String dateHour =
-                    DateTime.parse('$dateNow-0800').hour.toString();
-                String dateMinute =
-                    DateTime.parse('$dateNow-0800').minute.toString();
                 dataRef.update({
                   now: Map<String, dynamic>.from(
                     {
-                      'endTime': '$dateHour:$dateMinute',
+                      'endTime': ref.watch(endTimeProvider),
                       'selectedStore': storeSelected,
                       'menu': storeData.when(
                           data: (store) => store[storeSelected]['menu'],
