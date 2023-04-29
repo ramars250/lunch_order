@@ -17,6 +17,9 @@ class AdminView extends ConsumerWidget {
     '10:15',
     '10:30',
     '10:45',
+    '11:00',
+    '11:15',
+    '20:00',
   ];
 
   @override
@@ -32,38 +35,48 @@ class AdminView extends ConsumerWidget {
         children: [
           Expanded(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 2 / 3,
-              width: MediaQuery.of(context).size.width,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 2 / 3,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               child: storeData.when(
-                  data: (store) => GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate:
+                  data: (store) =>
+                      GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 3,
-                        mainAxisSpacing: 5,
-                        crossAxisSpacing: 5,
-                      ),
-                      itemCount: store.length,
-                      itemBuilder: (context, index) {
-                        final isSelected = storeSelected == index;
-                        return GestureDetector(
-                          onTap: () {
-                            ref
-                                .read(selectedStoreProvider.notifier)
-                                .selectedStore(index);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 10, right: 10),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: isSelected ? Colors.green : Colors.grey,
-                            ),
-                            child: Text(store[index]['store_name'].toString()),
+                            crossAxisCount: 3,
+                            childAspectRatio: 3,
+                            mainAxisSpacing: 5,
+                            crossAxisSpacing: 5,
                           ),
-                        );
-                      }),
+                          itemCount: store.length,
+                          itemBuilder: (context, index) {
+                            final isSelected = storeSelected == index;
+                            return GestureDetector(
+                              onTap: () {
+                                ref
+                                    .read(selectedStoreProvider.notifier)
+                                    .selectedStore(index);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                    left: 10, right: 10),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: isSelected ? Colors.green : Colors
+                                      .grey,
+                                ),
+                                child: Text(
+                                    store[index]['store_name'].toString()),
+                              ),
+                            );
+                          }),
                   error: (error, _) => const Text('ERROR'),
                   loading: () => const CircularProgressIndicator()),
             ),
@@ -87,7 +100,8 @@ class AdminView extends ConsumerWidget {
                     value: ref.watch(endTimeProvider),
                     items: timeList
                         .map<DropdownMenuItem>(
-                            (time) => DropdownMenuItem<String>(
+                            (time) =>
+                            DropdownMenuItem<String>(
                                 value: time,
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
@@ -98,39 +112,69 @@ class AdminView extends ConsumerWidget {
                                 )))
                         .toList(),
                     onChanged: (value) =>
-                        ref.read(endTimeProvider.notifier).state = value,
+                    ref
+                        .read(endTimeProvider.notifier)
+                        .state = value,
                   ),
                 ),
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: ElevatedButton(
-              onPressed: () {
-                DatabaseReference dataRef =
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    DatabaseReference dataRef =
                     FirebaseDatabase.instance.ref('order');
-                String now = DateTime.now().year.toString() +
-                    DateTime.now().month.toString() +
-                    DateTime.now().day.toString();
-                dataRef.update({
-                  now: Map<String, dynamic>.from(
-                    {
-                      'endTime': ref.watch(endTimeProvider),
-                      'selectedStore': storeSelected,
-                      'menu': storeData.when(
-                          data: (store) => store[storeSelected]['menu'],
-                          error: (error, _) => const Text('ERROR'),
-                          loading: () => const CircularProgressIndicator()),
-                    },
-                  ),
-                });
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const UserView()));
-              },
-              child: const Text('確定'),
-            ),
+                    String now = DateTime
+                        .now()
+                        .year
+                        .toString() +
+                        DateTime
+                            .now()
+                            .month
+                            .toString() +
+                        DateTime
+                            .now()
+                            .day
+                            .toString();
+                    dataRef.update({
+                      now: Map<String, dynamic>.from(
+                        {
+                          'endTime': ref.watch(endTimeProvider),
+                          'selectedStore': storeSelected,
+                          'menu': storeData.when(
+                              data: (store) => store[storeSelected]['menu'],
+                              error: (error, _) => const Text('ERROR'),
+                              loading: () => const CircularProgressIndicator()),
+                        },
+                      ),
+                    });
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserView()));
+                  },
+                  child: const Text('確定'),
+                ),
+              ),
+              const SizedBox(width: 20),
+              Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserView()));
+                  },
+                  child: const Text('去點餐'),
+                ),
+              )
+            ],
           ),
+
         ],
       ),
     );

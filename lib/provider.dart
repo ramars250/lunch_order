@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lunch_order/selected_controller.dart';
 import 'package:lunch_order/user_controller.dart';
 
+final storeProvider1 = Provider((ref) {
+
+});
+
 final storeProvider = FutureProvider<List<dynamic>>((ref) async {
   final storeRef = FirebaseDatabase.instance.ref('store');
   final storeName = await storeRef.child('').get();

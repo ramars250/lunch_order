@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lunch_order/cart_view.dart';
 import 'package:lunch_order/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +68,7 @@ class UserView extends ConsumerWidget {
                                 final format = DateFormat('HH:mm');
                                 final nowString = format.format(now);
                                 final diff = orderTime.compareTo(nowString);
-                                print(nowString);
+                                // print(nowString);
                                 if (diff <= 0) {
                                   showDialog(
                                     context: context,
@@ -83,7 +85,6 @@ class UserView extends ConsumerWidget {
                                       );
                                     },
                                   );
-                                  print('訂餐截止囉');
                                 } else {
                                   ref
                                       .read(selectedItemsProvider.notifier)
@@ -143,8 +144,21 @@ class UserView extends ConsumerWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  print(userName);
-                  logout();
+                  String now = DateTime.now().year.toString() +
+                      DateTime.now().month.toString() +
+                      DateTime.now().day.toString();
+                  DatabaseReference dataRef =
+                      FirebaseDatabase.instance.ref('order/$now/order/$userName');
+
+                  dataRef.update({
+                    'orderName': userName,
+                    'order': ref.watch(selectedItemsProvider),
+                  });
+                  // print(titleData);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CartView()));
                 },
                 child: const Text(
                   '送出',
@@ -156,11 +170,6 @@ class UserView extends ConsumerWidget {
         );
       },
     );
-  }
-
-  void logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
   }
 }
 
